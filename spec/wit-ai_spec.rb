@@ -59,4 +59,25 @@ describe WitAI do
       result['outcome']['entities']['metric']['value'].should == 'metric_visitors'
     end
   end
+
+  context "recognizing speech" do
+    let(:audio_content) { "foooobarrrr" }
+
+    before do
+      @tmpfile = Tempfile.new 'audio'
+      @tmpfile.write audio_content
+      @tmpfile.rewind
+
+      stub_request(:post, "https://api.wit.ai/speech")
+        .with(body: audio_content, headers: {'Authorization' => "Bearer abc123", 'Content-Type' => 'audio/wav'})
+        .to_return(body: interpretation, headers: {'Content-Type' => 'application/json'})
+    end
+
+    it "should return the interpretation as a Hash" do
+      result = subject.recognize @tmpfile.path, format: 'audio/wav'
+      result['msg_body'].should == message_body
+      result['outcome']['intent'].should == intent
+      result['outcome']['entities']['metric']['value'].should == 'metric_visitors'
+    end
+  end
 end

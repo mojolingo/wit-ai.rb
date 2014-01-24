@@ -21,5 +21,13 @@ module WitAI
         req.headers['Authorization'] = "Bearer #{@api_key}"
       end.body
     end
+
+    def recognize(file_path, format: raise(ArgumentError, 'Must specify a format'))
+      @conn.post '/speech' do |req|
+        req.headers['Authorization'] = "Bearer #{@api_key}"
+        req.headers['Content-Type'] = format
+        req.body = File.read(file_path)
+      end.body
+    end
   end
 end
