@@ -1,5 +1,8 @@
 require "wit-ai/version"
+require "wit-ai/client"
 
 module WitAI
-  # Your code goes here...
+  def self.new_client(*params)
+    Client.new(*params)
+  end
 end

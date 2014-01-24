@@ -6,6 +6,7 @@ Coveralls.wear!
 %w{
   bundler/setup
   wit-ai
+  webmock/rspec
 }.each { |f| require f }
 
 Bundler.require(:default, :test) if defined?(Bundler)
@@ -18,4 +19,6 @@ RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
   config.color_enabled = true
+
+  config.before { WebMock.disable_net_connect! }
 end
